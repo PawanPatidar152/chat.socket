@@ -1,36 +1,17 @@
-import React, { useState } from "react";
+import "font-awesome/css/font-awesome.min.css";
 
-const SearchBar = () => {
-  const [searchValue, setSearchValue] = useState(" "); 
-
-  const handleInputChange = (event) => {
-    setSearchValue(event.target.value); 
-  };
-
-  const handleSearch = () => {
-    console.log("Search value:", searchValue);
-  };
-
+const SearchBar = ({ placeholder, searchValue, onChange }) => {
   return (
-    <div className="row no-gutters mt-3 align-items-center ">
-      <div className="col col-md-4 w-100  ">
+    <div className="row no-gutters pt-3 align-items-center ">
+      <div className="col col-md-4" style={{width:"95%", margin:"8px", padding:"0px 20px" }}>
         <input
           className="form-control border-secondary rounded-pill pr-5 m-8"
           type="search"
-          placeholder="Search"
+          placeholder={placeholder}
           id="example-search-input2"
-          value={searchValue} 
-          onChange={handleInputChange} 
+          value={searchValue}
+          onChange={onChange}
         />
-      </div>
-      <div className="col-auto">
-        <button
-          className="btn btn-outline-light text-dark border-0 rounded-pill ml-n5"
-          type="button"
-          onClick={handleSearch}
-        >
-          <i className="fa fa-search"></i>
-        </button>
       </div>
     </div>
   );

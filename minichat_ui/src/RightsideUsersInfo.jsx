@@ -9,14 +9,7 @@ import attachments from "./assets/attachments.png";
 const RightsideUsersInfo = () => {
   return (
     <div className="container pt-4">
-      <SearchBar />
-      <ProfileRight
-        name="Pawan Patidar"
-        description="Frontend developer"
-        image={admin}
-        chatImage={chatImage}
-        callImage={callImage}
-      />
+   
       <div>
         <div>
           <h3>Attachmemts</h3>

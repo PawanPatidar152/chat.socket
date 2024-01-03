@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
+
 
 const ChatContainer = () => {
   return (
-    <div>
-      <h1>Main chat</h1>
+    <div style={{ backgroundColor: "white", height: "100%" }}>
+   
     </div>
-  )
-}
+  );
+};
 
-export default ChatContainer
+export default ChatContainer;
