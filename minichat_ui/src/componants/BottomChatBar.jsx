@@ -58,7 +58,6 @@ const BottomChatBar = (props) => {
     }
   };
 
-  // Ensure that the video element is updated when isCameraOpen changes
   useEffect(() => {
     if (isCameraOpen && videoRef.current) {
       videoRef.current.srcObject = stream;
@@ -88,7 +87,7 @@ const BottomChatBar = (props) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []); 
+  }, []);
 
   return (
     <div

@@ -97,7 +97,7 @@ function App() {
       chatContainers.style.width = "100%";
       chatContainers.style.position = "initial";
       chatContainers.style.flexBasis = "initial";
-   
+
     }
   };
 
@@ -111,10 +111,10 @@ function App() {
       } else {
         setleftSideChatFlexBasis("20%");
         leftSideChat.style.display = "block";
-      chatContainers.style.display = "none";
-      chatContainers.style.width = "100%";
-      chatContainers.style.position = "relative";
-      chatContainers.style.flexBasis = "70%";
+        chatContainers.style.display = "none";
+        chatContainers.style.width = "100%";
+        chatContainers.style.position = "relative";
+        chatContainers.style.flexBasis = "70%";
       }
     };
     window.addEventListener("resize", handleFlexBasis);
@@ -124,6 +124,12 @@ function App() {
     };
   }, [window.innerWidth]);
 
+  const handleBackButtonClick = () => {
+    const chatContainers = document.getElementById("chatContainer");
+    const leftSideChat = document.getElementById("leftSide");
+    leftSideChat.style.display = "block";
+    chatContainers.style.display = "none";
+  };
   return (
     <div style={{ width: "100vw", maxHeight: "100vh  " }} className="d-flex">
       <div
@@ -134,7 +140,7 @@ function App() {
           justifyContent: "center",
           flexDirection: "column",
           flexBasis: leftSideChatFlexBasis,
-                    flexShrink: "0",
+          flexShrink: "0",
         }}
       >
         <div
@@ -192,6 +198,8 @@ function App() {
           image={admin}
           searchIcon={searchIcon}
           callImage={callImage}
+          onBackButtonClick={handleBackButtonClick} 
+
         />
         <BottomChatBar
           name={profileData[user].name}

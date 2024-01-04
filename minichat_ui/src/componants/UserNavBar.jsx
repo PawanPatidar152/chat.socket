@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const UserNavBar = (props) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -17,25 +17,28 @@ const UserNavBar = (props) => {
         setArrow("none");
       }
     };
-      window.addEventListener("resize", handleArrow);
-  
-    // Call the handler initially
+    window.addEventListener("resize", handleArrow);
+
     handleArrow();
-  
-    // Detach the event listener on component unmount
+
     return () => {
       window.removeEventListener("resize", handleArrow);
     };
-  }, [setArrow]); 
-  
+  }, [setArrow]);
 
   return (
     <div
       className="p-3 d-flex align-items-center justify-content-between border-bottom border-secondary"
       style={{ columnGap: "15px" }}
     >
-      <div className="arrow-back" style={{ display: `${arrow}` }}>
-        <box-icon name="arrow-back"></box-icon>
+      <div
+        className="arrow-back"
+        style={{ display: `${arrow}` }}
+        onClick={() => {
+          props.onBackButtonClick(); 
+        }}
+      >
+        <box-icon name="arrow-back "></box-icon>
       </div>
       <div
         className=" d-flex  align-items-center justify-content-center"
