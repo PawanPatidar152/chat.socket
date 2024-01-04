@@ -5,32 +5,46 @@ const Profile = (props) => {
 
   return (
     <div
-      className="d-flex align-items-center justify-content-center "
-      style={{ padding: "0px 15px" }}
+      className="d-flex align-items-center justify-content-between  "
+      style={{ padding: "0px 15px", width: "100%" }}
     >
-      <div>
-        <img
-          src={props.image}
-          alt="admin image"
-          style={{ height: "48px", borderRadius: "50%" }}
-        />
-      </div>
-      <div className="m-4">
+      <div className="m-3 d-flex gap-3">
         <div>
-          {props.name ? (
-            <p className="m-0" style={{ fontSize: "17px" }}>
-              {props.name}
-            </p>
-          ) : (
-            <p className="m-0" style={{ fontSize: "20px", fontWeight: "600",textWrap:"wrap" , overflow:"auto",visibility: isEditing ? 'hidden' : 'visible'}}>
-              {profileName}
-            </p>
-          )}
+          <img
+            src={props.image}
+            alt="admin image"
+            style={{ height: "48px", borderRadius: "50%" }}
+          />
         </div>
-        <div>
-          <p className="m-0" style={{ fontSize: "12px" }}>
-            {props.description}
-          </p>
+        <div style={{ minWidth: "154px" }}>
+          {props.name ? (
+            <>
+              <p className="m-0" style={{ fontSize: "17px" }}>
+                {props.name}
+              </p>
+              <p className="m-0" style={{ fontSize: "12px" }}>
+                {props.description}
+              </p>
+            </>
+          ) : (
+            <>
+              <p
+                className="m-0"
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  textWrap: "wrap",
+                  overflow: "auto",
+                  visibility: isEditing ? "hidden" : "visible",
+                }}
+              >
+                {profileName}
+              </p>
+              <p className="m-0" style={{ fontSize: "12px" }}>
+                {props.description}
+              </p>
+            </>
+          )}
         </div>
       </div>
       <div className="m-2">
@@ -48,21 +62,20 @@ const Profile = (props) => {
                     style={{
                       width: "113px",
                       position: "absolute",
-                      left: "113px",
-                      top: "24px",
+                      left: "94px",
+                      top: "17px",
                     }}
                   />
                   <button onClick={() => setEditing(!isEditing)}>Save</button>
                 </>
               ) : (
-                <button style={{width:"39px"}}>
-                  <img
-                    src={props.endTextImage}
-                    style={{ height: "20px" }}
-                    alt="Edit"
-                    onClick={() => setEditing(!isEditing)}
-                  />
-                </button>
+                <box-icon
+                  type="solid"
+                  name="edit-alt"
+                  size="md"
+                  alt="Edit"
+                  onClick={() => setEditing(!isEditing)}
+                ></box-icon>
               )}
             </div>
           </>

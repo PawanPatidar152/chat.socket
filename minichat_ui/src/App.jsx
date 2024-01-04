@@ -16,6 +16,8 @@ import docImage from "./assets/paper-pin.png";
 import emojiImage from "./assets/happy.png";
 import ProfileRight from "./componants/ProfileRight";
 import chatImage from "./assets/speech-bubble.png";
+import "boxicons";
+
 const profileData = [
   {
     name: "User 1",
@@ -48,6 +50,30 @@ const profileData = [
     image: admin,
     endText: "10:20",
   },
+  {
+    name: "User 6",
+    description: "Last chat massage",
+    image: admin,
+    endText: "10:20",
+  },
+  {
+    name: "User 7",
+    description: "Last chat massage",
+    image: admin,
+    endText: "10:20",
+  },
+  {
+    name: "User 8",
+    description: "Last chat massage",
+    image: admin,
+    endText: "10:20",
+  },
+  {
+    name: "User 9",
+    description: "Last chat massage",
+    image: admin,
+    endText: "10:20",
+  },
 ];
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,42 +87,61 @@ function App() {
 
   const handleProfileClick = (index) => {
     setUser(index);
-    console.log("Clicked profile index:", index);
+    const windowWidth = window.innerWidth;
+    const chatContainers = document.getElementById("chatContainer");
+    const leftSideChat = document.getElementById("leftSide");
+    if (windowWidth <= 687) {
+      leftSideChat.style.display = "none";
+      chatContainers.style.display = "block";
+      chatContainers.style.width = "100%";
+      chatContainers.style.position = "initial";
+      chatContainers.style.flexBasis = "initial";
+
+      console.log(chatContainers, leftSideChat);
+    }
+    console.log(chatContainers, leftSideChat);
   };
 
   return (
-    <div
-      className="position-absolute top-50 start-50 translate-middle"
-      style={{ width: "90vw" }}
-    >
-      <div className="row">
+    <div style={{ width: "100vw", maxHeight: "100vh  " }} className="d-flex">
+      <div
+        id="leftSide"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          flexBasis: "20%",
+          flexGrow: "1",
+          flexShrink: "0",
+        }}
+      >
         <div
-          className="col-md-3"
-          style={{
-            height: "80vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
+          className="fixed-div "
+          style={{ width: "100%", height: "100vh", backgroundColor: "#F7F8FC" }}
         >
-          <div
-            className="fixed-div bg-secondary-subtle"
-            style={{ height: "80vh" , width:"100%"}}
-          >
-            <LeftsideUserProfile />
-            <SearchBar
-              placeholder="Search..."
-              searchValue={searchTerm}
-              onChange={handleSearchChange}
-            />
-
+          <LeftsideUserProfile />
+          <SearchBar
+            placeholder="Search..."
+            searchValue={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <div style={{ overflow: "scroll", height: "75%" }}>
             <ul
               className="list-style"
               style={{ listStyle: "none", cursor: "pointer", padding: "0px" }}
             >
               {filteredProfiles.map((data, index) => (
-                <li key={index} onClick={() => handleProfileClick(index)}>
+                <li
+                  key={index}
+                  onClick={() => handleProfileClick(index)}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#dce2ec")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.backgroundColor = "")
+                  }
+                >
                   <Profile
                     name={data.name}
                     description={data.description}
@@ -108,42 +153,48 @@ function App() {
             </ul>
           </div>
         </div>
-        <div className="col-md-6">
-          <div className="fixed-div" style={{ height: "80vh" }}>
-            <ChatContainer />
-            <UserNavBar
-              name={profileData[user].name}
-              description="Online"
-              image={admin}
-              searchIcon={searchIcon}
-              callImage={callImage}
-            />
-            <BottomChatBar
-              name={profileData[user].name}
-              description="Online"
-              image={admin}
-              sendImage={sendImage}
-              camImage={camImage}
-              docImage={docImage}
-              emojiImage={emojiImage}
-            />
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div
-            className="fixed-div bg-secondary-subtle"
-            style={{ height: "80vh" }}
-          >
-            <SearchBar />
-            <ProfileRight
-              name={profileData[user].name}
-              description="Frontend developer"
-              image={admin}
-              chatImage={chatImage}
-              callImage={callImage}
-            />
-            <RightsideUsersInfo />
-          </div>
+      </div>
+      <div
+        className=" d-sm-block border border-secondary"
+        id="chatContainer"
+        style={{
+          display: "none",
+          flexBasis: "55%",
+          position: "relative",
+          flexGrow: "0",
+        }}
+      >
+        <ChatContainer />
+        <UserNavBar
+          name={profileData[user].name}
+          description="Online"
+          image={admin}
+          searchIcon={searchIcon}
+          callImage={callImage}
+        />
+        <BottomChatBar
+          name={profileData[user].name}
+          description="Online"
+          image={admin}
+          sendImage={sendImage}
+          camImage={camImage}
+          docImage={docImage}
+          emojiImage={emojiImage}
+        />
+      </div>
+      <div className="d-none d-lg-block" style={{ flexBasis: "25%" }}>
+        <div
+          className="p-4"
+          style={{ height: "100vh", backgroundColor: "#F7F8FC" }}
+        >
+          <ProfileRight
+            name={profileData[user].name}
+            description="Frontend developer"
+            image={admin}
+            chatImage={chatImage}
+            callImage={callImage}
+          />
+          <RightsideUsersInfo />
         </div>
       </div>
     </div>

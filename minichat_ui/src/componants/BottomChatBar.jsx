@@ -8,6 +8,8 @@ const BottomChatBar = (props) => {
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]); // Store sent messages
+  const [size, setIconSize] = useState("100px");
+
   const videoRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -63,21 +65,48 @@ const BottomChatBar = (props) => {
     }
   }, [isCameraOpen, stream]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      const windowWidth = window.innerWidth;
+
+      if (windowWidth <= 576) {
+        setIconSize("20px");
+      } else if (windowWidth <= 991) {
+        setIconSize("25px");
+      } else {
+        setIconSize("40px");
+      }
+    };
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Call the handler initially to set the initial icon size
+    handleResize();
+
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); 
+
   return (
     <div
-      className="d-flex align-items-center justify-content-center"
-      style={{ position: "fixed", bottom: "12px", width: "726px" }}
+      className="d-flex align-items-center w-100 p-3 border-top border-secondary"
+      style={{ position: "absolute", bottom: "0px" }}
     >
       <div>
-        <img
-          src={mic}
+        <box-icon
+          name="microphone"
+          type="solid"
           alt="Mic"
-          style={{ height: "44px", borderRadius: "50%" }}
-        />
+          size={`${size}`}
+        ></box-icon>
       </div>
 
       <input
         className="form-control border-secondary rounded-pill pr-5 m-8"
+        style={{ flexGrow: "1" }}
         type="search"
         placeholder="Write something ..."
         id="example-search-input2"
@@ -86,7 +115,7 @@ const BottomChatBar = (props) => {
       />
 
       <div
-        className="w-50 m-2 d-flex align-items-center justify-content-end"
+        className=" m-2 d-flex align-items-center justify-content-end"
         style={{ columnGap: "20px" }}
       >
         <div>
@@ -96,42 +125,49 @@ const BottomChatBar = (props) => {
             ref={fileInputRef}
             onChange={handleFileInputChange}
             multiple
-            webkitdirectory="true" 
+            webkitdirectory="true"
           />
-          <img
-            src={props.docImage}
-            style={{ height: "40px", cursor: "pointer" }}
+
+          <box-icon
+            name="link-alt"
+            style={{ cursor: "pointer" }}
             alt="Documents"
-            onClick={() => fileInputRef.current.click()} // Trigger the file input when clicking the docImage
-          />
+            onClick={() => fileInputRef.current.click()}
+            size={`${size}`}
+          ></box-icon>
         </div>
         <div>
-          <img
-            src={props.camImage}
+          <box-icon
+            name="camera"
+            type="solid"
             style={{
-              height: "40px",
               cursor: "pointer",
               border: isCameraOpen ? "2px solid red" : "none",
             }}
             alt="Camera"
+            size={`${size}`}
             onClick={isCameraOpen ? closeCamera : openCamera}
-          />
+          ></box-icon>
         </div>
         <div>
-          <img
-            src={props.emojiImage}
-            style={{ height: "40px", cursor: "pointer" }}
+          <box-icon
+            name="face"
+            type="solid"
+            style={{ cursor: "pointer" }}
             alt="Emoji"
+            size={`${size}`}
             onClick={toggleEmojiPicker}
-          />
+          ></box-icon>
         </div>
         <div>
-          <img
-            src={props.sendImage}
-            style={{ height: "40px", cursor: "pointer" }}
+          <box-icon
+            name="send"
+            type="solid"
+            style={{ cursor: "pointer" }}
             alt="Send"
-            onClick={handleSendMessage} // Send the message when clicking the send image icon
-          />
+            size={`${size}`}
+            onClick={handleSendMessage}
+          ></box-icon>
         </div>
       </div>
 
@@ -162,9 +198,9 @@ const BottomChatBar = (props) => {
           position: "absolute",
           top: "-500px",
           right: "10px",
-          "max-height": "500px",
+          maxHeight: "500px",
           right: "10px",
-          "overflow-y": "scroll",
+          overflowY: "scroll",
         }}
       >
         {messages.map((message, index) => (

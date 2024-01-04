@@ -19,16 +19,24 @@ const ProfileRight = (props) => {
       </div>
       <div className="w-100 m-2 d-flex align-items-center justify-content-evenly">
         <div>
-          <img src={props.chatImage} style={{ height: "40px" }} alt="Chat" />
+          <box-icon
+            name="message-rounded-dots"
+            type="solid"
+            style={{ height: "40px" }}
+            alt="Chat"
+            size="md"
+
+          ></box-icon>
           <p>Chat</p>
         </div>
 
         <div>
-          <img
-            src={props.callImage}
-            style={{ height: "40px" }}
+          <box-icon
+            name="video"
+            type="solid"
+            size="md"
             alt="Video Calll"
-          />
+          ></box-icon>
           <p>Video Call</p>
         </div>
       </div>
