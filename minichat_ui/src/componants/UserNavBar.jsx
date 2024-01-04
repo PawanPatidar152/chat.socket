@@ -11,7 +11,7 @@ const UserNavBar = (props) => {
   useEffect(() => {
     const handleArrow = () => {
       const windowWidth = window.innerWidth;
-      if (windowWidth <= 576) {
+      if (windowWidth <= 767) {
         setArrow("block");
       } else {
         setArrow("none");

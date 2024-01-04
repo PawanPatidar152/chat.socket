@@ -6,7 +6,10 @@ const Profile = (props) => {
   return (
     <div
       className="d-flex align-items-center justify-content-between  "
-      style={{ padding: "0px 15px", width: "100%" }}
+      style={{
+        padding: "0px 15px",
+        width: "100%",
+      }}
     >
       <div className="m-3 d-flex gap-3">
         <div>

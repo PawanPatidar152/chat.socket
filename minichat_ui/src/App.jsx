@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ChatContainer from "./ChatContainer";
 import LeftsideUserProfile from "./LeftsideUserProfile";
 import RightsideUsersInfo from "./RightsideUsersInfo";
@@ -78,6 +78,7 @@ const profileData = [
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState("0");
+  const [leftSideChatFlexBasis, setleftSideChatFlexBasis] = useState("30% ");
   const filteredProfiles = profileData.filter((profile) =>
     profile.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -90,17 +91,38 @@ function App() {
     const windowWidth = window.innerWidth;
     const chatContainers = document.getElementById("chatContainer");
     const leftSideChat = document.getElementById("leftSide");
-    if (windowWidth <= 687) {
+    if (windowWidth <= 767) {
       leftSideChat.style.display = "none";
       chatContainers.style.display = "block";
       chatContainers.style.width = "100%";
       chatContainers.style.position = "initial";
       chatContainers.style.flexBasis = "initial";
-
-      console.log(chatContainers, leftSideChat);
+   
     }
-    console.log(chatContainers, leftSideChat);
   };
+
+  useEffect(() => {
+    const handleFlexBasis = () => {
+      const windowWidth = window.innerWidth;
+      const chatContainers = document.getElementById("chatContainer");
+      const leftSideChat = document.getElementById("leftSide");
+      if (windowWidth <= 767) {
+        setleftSideChatFlexBasis("100%");
+      } else {
+        setleftSideChatFlexBasis("20%");
+        leftSideChat.style.display = "block";
+      chatContainers.style.display = "none";
+      chatContainers.style.width = "100%";
+      chatContainers.style.position = "relative";
+      chatContainers.style.flexBasis = "70%";
+      }
+    };
+    window.addEventListener("resize", handleFlexBasis);
+    handleFlexBasis();
+    return () => {
+      window.removeEventListener("resize", handleFlexBasis);
+    };
+  }, [window.innerWidth]);
 
   return (
     <div style={{ width: "100vw", maxHeight: "100vh  " }} className="d-flex">
@@ -111,9 +133,8 @@ function App() {
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          flexBasis: "20%",
-          flexGrow: "1",
-          flexShrink: "0",
+          flexBasis: leftSideChatFlexBasis,
+                    flexShrink: "0",
         }}
       >
         <div
@@ -155,13 +176,13 @@ function App() {
         </div>
       </div>
       <div
-        className=" d-sm-block border border-secondary"
+        className=" d-md-block border border-secondary"
         id="chatContainer"
         style={{
           display: "none",
-          flexBasis: "55%",
+          flexBasis: "70%",
           position: "relative",
-          flexGrow: "0",
+          flexGrow: "1",
         }}
       >
         <ChatContainer />
@@ -182,7 +203,7 @@ function App() {
           emojiImage={emojiImage}
         />
       </div>
-      <div className="d-none d-lg-block" style={{ flexBasis: "25%" }}>
+      <div className="d-none d-xl-block" style={{ flexBasis: "25%" }}>
         <div
           className="p-4"
           style={{ height: "100vh", backgroundColor: "#F7F8FC" }}
