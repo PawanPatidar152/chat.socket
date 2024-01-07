@@ -18,19 +18,18 @@ const ProfileRight = (props) => {
         </div>
       </div>
       <div className="w-100 m-2 d-flex align-items-center justify-content-evenly">
-        <div>
+        <div className="d-flex align-items-center justify-content-center flex-column">
           <box-icon
             name="message-rounded-dots"
             type="solid"
             style={{ height: "40px" }}
             alt="Chat"
             size="md"
-
           ></box-icon>
           <p>Chat</p>
         </div>
 
-        <div>
+        <div className="d-flex align-items-center justify-content-center flex-column">
           <box-icon
             name="video"
             type="solid"

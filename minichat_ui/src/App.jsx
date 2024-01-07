@@ -7,15 +7,8 @@ import admin from "./assets/admin.png";
 import Profile from "./componants/Profile";
 import SearchBar from "./componants/SearchBar";
 import UserNavBar from "./componants/UserNavBar";
-import callImage from "./assets/Zoom.png";
 import BottomChatBar from "./componants/BottomChatBar";
-import searchIcon from "./assets/magnifying-glass.png";
-import sendImage from "./assets/send.png";
-import camImage from "./assets/icons8-camera-50.png";
-import docImage from "./assets/paper-pin.png";
-import emojiImage from "./assets/happy.png";
 import ProfileRight from "./componants/ProfileRight";
-import chatImage from "./assets/speech-bubble.png";
 import "boxicons";
 
 const profileData = [
@@ -24,24 +17,32 @@ const profileData = [
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: true,
+    id: "0",
   },
   {
     name: "User 2",
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: true,
+    id: "1",
   },
   {
     name: "User 3",
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: false,
+    id: "2",
   },
   {
     name: "User 4",
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: false,
+    id: "3",
   },
 
   {
@@ -49,36 +50,48 @@ const profileData = [
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: true,
+    id: "4",
   },
   {
     name: "User 6",
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: false,
+    id: "5",
   },
   {
     name: "User 7",
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: true,
+    id: "6",
   },
   {
     name: "User 8",
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: false,
+
+    id: "7",
   },
   {
     name: "User 9",
     description: "Last chat massage",
     image: admin,
     endText: "10:20",
+    online: true,
+    id: "8",
   },
 ];
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState("0");
-  const [leftSideChatFlexBasis, setleftSideChatFlexBasis] = useState("30% ");
+  const [activeProfile, setActiveProfile] = useState(0);
+  const [leftSideChatFlexBasis, setleftSideChatFlexBasis] = useState("");
   const filteredProfiles = profileData.filter((profile) =>
     profile.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -86,8 +99,10 @@ function App() {
     setSearchTerm(event.target.value);
   };
 
-  const handleProfileClick = (index) => {
-    setUser(index);
+  const handleProfileClick = (id) => {
+    setUser(id);
+    setActiveProfile(id);
+
     const windowWidth = window.innerWidth;
     const chatContainers = document.getElementById("chatContainer");
     const leftSideChat = document.getElementById("leftSide");
@@ -97,26 +112,27 @@ function App() {
       chatContainers.style.width = "100%";
       chatContainers.style.position = "initial";
       chatContainers.style.flexBasis = "initial";
-
     }
   };
+  const handleFlexBasis = () => {
+    const windowWidth = window.innerWidth;
+    const chatContainers = document.getElementById("chatContainer");
+    const leftSideChat = document.getElementById("leftSide");
+    const rightSideChat = document.getElementById("profileRight");
+    setleftSideChatFlexBasis(windowWidth < 767 ? "100%" : "20%");
 
+    if (windowWidth <= 767) {
+      console.log("====");
+    } else {
+      console.log("+++");
+      leftSideChat.style.display = "block";
+      chatContainers.style.display = "none";
+      chatContainers.style.width = "100%";
+      chatContainers.style.position = "relative";
+      rightSideChat.style.display = "none";
+    }
+  };
   useEffect(() => {
-    const handleFlexBasis = () => {
-      const windowWidth = window.innerWidth;
-      const chatContainers = document.getElementById("chatContainer");
-      const leftSideChat = document.getElementById("leftSide");
-      if (windowWidth <= 767) {
-        setleftSideChatFlexBasis("100%");
-      } else {
-        setleftSideChatFlexBasis("20%");
-        leftSideChat.style.display = "block";
-        chatContainers.style.display = "none";
-        chatContainers.style.width = "100%";
-        chatContainers.style.position = "relative";
-        chatContainers.style.flexBasis = "70%";
-      }
-    };
     window.addEventListener("resize", handleFlexBasis);
     handleFlexBasis();
     return () => {
@@ -130,6 +146,13 @@ function App() {
     leftSideChat.style.display = "block";
     chatContainers.style.display = "none";
   };
+
+  const handleDotButtonClick = () => {
+    console.log(" triple dot Button Clicked...");
+    const profileRightSide = document.getElementById("profileRight");
+    profileRightSide.style.display = "block";
+  };
+
   return (
     <div style={{ width: "100vw", maxHeight: "100vh  " }} className="d-flex">
       <div
@@ -160,8 +183,8 @@ function App() {
             >
               {filteredProfiles.map((data, index) => (
                 <li
-                  key={index}
-                  onClick={() => handleProfileClick(index)}
+                  key={data.id}
+                  onClick={() => handleProfileClick(data.id)}
                   onMouseOver={(e) =>
                     (e.currentTarget.style.backgroundColor = "#dce2ec")
                   }
@@ -174,6 +197,7 @@ function App() {
                     description={data.description}
                     image={data.image}
                     endText={data.endText}
+                    isActive={index === activeProfile}
                   />
                 </li>
               ))}
@@ -194,24 +218,18 @@ function App() {
         <ChatContainer />
         <UserNavBar
           name={profileData[user].name}
-          description="Online"
+          online={profileData[user].online}
           image={admin}
-          searchIcon={searchIcon}
-          callImage={callImage}
-          onBackButtonClick={handleBackButtonClick} 
-
+          onBackButtonClick={handleBackButtonClick}
+          onDotButtonClick={handleDotButtonClick}
         />
-        <BottomChatBar
-          name={profileData[user].name}
-          description="Online"
-          image={admin}
-          sendImage={sendImage}
-          camImage={camImage}
-          docImage={docImage}
-          emojiImage={emojiImage}
-        />
+        <BottomChatBar name={profileData[user].name} />
       </div>
-      <div className="d-none d-xl-block" style={{ flexBasis: "25%" }}>
+      <div
+        id="profileRight"
+        className="d-none d-xl-block"
+        style={{ flexBasis: "25%" }}
+      >
         <div
           className="p-4"
           style={{ height: "100vh", backgroundColor: "#F7F8FC" }}
@@ -220,8 +238,6 @@ function App() {
             name={profileData[user].name}
             description="Frontend developer"
             image={admin}
-            chatImage={chatImage}
-            callImage={callImage}
           />
           <RightsideUsersInfo />
         </div>

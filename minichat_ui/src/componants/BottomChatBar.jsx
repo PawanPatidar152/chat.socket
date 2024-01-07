@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import EmojiPicker from "emoji-picker-react";
-import mic from "../assets/icons8-mic-24.png";
 
 const BottomChatBar = (props) => {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [stream, setStream] = useState(null);
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState([]); // Store sent messages
+  const [messages, setMessages] = useState([]);
   const [size, setIconSize] = useState("100px");
 
   const videoRef = useRef(null);
@@ -47,14 +46,13 @@ const BottomChatBar = (props) => {
 
   const handleFileInputChange = (e) => {
     const files = e.target.files;
-    // You can access the selected files and folders in the "files" array
     console.log("Selected files and folders:", files);
   };
 
   const handleSendMessage = () => {
     if (inputValue.trim() !== "") {
       setMessages((prevMessages) => [...prevMessages, inputValue.trim()]);
-      setInputValue(""); // Clear the input after sending
+      setInputValue(""); 
     }
   };
 
@@ -77,21 +75,43 @@ const BottomChatBar = (props) => {
       }
     };
 
-    // Add event listener for window resize
     window.addEventListener("resize", handleResize);
-
-    // Call the handler initially to set the initial icon size
     handleResize();
-
-    // Cleanup the event listener when the component is unmounted
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && inputValue.trim() !== "") {
+      setMessages((prevMessages) => [...prevMessages, inputValue.trim()]);
+      setInputValue(""); 
+      e.preventDefault(); 
+    }
+  };
+
+  const handleOutsideClick = (e) => {
+    const isOutside =
+      !e.target.closest(".camera-container") &&
+      !e.target.closest(".emoji-container") &&
+      !e.target.closest(".file-container");
+
+    if (isOutside) {
+      closeCamera();
+      setEmojiPickerVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <div
-      className="d-flex align-items-center w-100 p-3 border-top border-secondary"
+      className="d-flex align-items-center w-100 p-1 border-top border-secondary"
       style={{ position: "absolute", bottom: "0px" }}
     >
       <div>
@@ -110,14 +130,16 @@ const BottomChatBar = (props) => {
         placeholder="Write something ..."
         id="example-search-input2"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) => setInputValue(e.target.value)}  
+        onKeyUp={(e) => handleKeyPress(e)}
+
       />
 
       <div
         className=" m-2 d-flex align-items-center justify-content-end"
         style={{ columnGap: "20px" }}
       >
-        <div>
+        <div className="file-container">
           <input
             type="file"
             style={{ display: "none" }}
@@ -135,7 +157,7 @@ const BottomChatBar = (props) => {
             size={`${size}`}
           ></box-icon>
         </div>
-        <div>
+        <div className="camera-container">
           <box-icon
             name="camera"
             type="solid"
@@ -148,7 +170,7 @@ const BottomChatBar = (props) => {
             onClick={isCameraOpen ? closeCamera : openCamera}
           ></box-icon>
         </div>
-        <div>
+        <div className="emoji-container">
           <box-icon
             name="face"
             type="solid"
@@ -177,37 +199,45 @@ const BottomChatBar = (props) => {
       )}
 
       {isCameraOpen && (
-        <div style={{ position: "absolute", top: "60px" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: "60px",
+            left: "50%",
+            transform: "translateX(-50%",
+          }}
+        >
           <video
             ref={videoRef}
             autoPlay
             style={{
-              width: "620px",
+              width: "420px",
               height: "640px",
               position: "relative",
-              bottom: "600px",
+              bottom: "90vh",
             }}
           />
         </div>
       )}
-
-      {/* Display sent messages */}
       <div
         style={{
           position: "absolute",
           top: "-500px",
           right: "10px",
           maxHeight: "500px",
-          right: "10px",
+          textAlign: "right",
           overflowY: "scroll",
         }}
       >
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className="bg-secondary-subtle border rounded-8 p-2 m-1"
-          >
-            {message}
+          <div className="Messagewaladiv" style={{display:"flex" , justifyContent:"end"}}>
+            <p
+              key={index}
+              className="bg-secondary-subtle border rounded-8 p-2"
+              style={{ borderRadius: "16px", maxWidth: "fit-content" }}
+            >
+              {message}
+            </p>
           </div>
         ))}
       </div>

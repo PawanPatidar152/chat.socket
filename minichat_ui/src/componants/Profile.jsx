@@ -2,13 +2,13 @@ import React, { useState } from "react";
 const Profile = (props) => {
   const [profileName, newProfileName] = useState(props.profileName);
   const [isEditing, setEditing] = useState(false);
-
   return (
     <div
       className="d-flex align-items-center justify-content-between  "
       style={{
         padding: "0px 15px",
         width: "100%",
+        backgroundColor: props.isActive ? "#dce2ec" : "",
       }}
     >
       <div className="m-3 d-flex gap-3">
