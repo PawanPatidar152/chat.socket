@@ -90,7 +90,7 @@ const profileData = [
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState("0");
-  const [activeProfile, setActiveProfile] = useState(0);
+  const [activeProfile, setActiveProfile] = useState("0");
   const [leftSideChatFlexBasis, setleftSideChatFlexBasis] = useState("");
   const filteredProfiles = profileData.filter((profile) =>
     profile.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -197,7 +197,7 @@ function App() {
                     description={data.description}
                     image={data.image}
                     endText={data.endText}
-                    isActive={index === activeProfile}
+                    isActive={data.id === activeProfile}
                   />
                 </li>
               ))}
