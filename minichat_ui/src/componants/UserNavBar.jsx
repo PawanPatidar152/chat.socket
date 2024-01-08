@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 
 const UserNavBar = (props) => {
+  const { isDarkMode } = props;
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [arrow, setArrow] = useState("none");
   const [dot, setDot] = useState("none");
@@ -44,8 +46,6 @@ const UserNavBar = (props) => {
       window.removeEventListener("resize", handleDot);
     };
   }, [setDot]);
-
-  
 
   return (
     <div
@@ -112,6 +112,7 @@ const UserNavBar = (props) => {
             style={{ cursor: "pointer" }}
             size="md"
             alt="Search"
+            color={isDarkMode ? "white" : "black"}
             onClick={toggleSearch}
           ></box-icon>
         </div>
@@ -121,6 +122,7 @@ const UserNavBar = (props) => {
             type="solid"
             size="md"
             alt="Video Calll"
+            color={isDarkMode ? "white" : "black"}
           ></box-icon>
         </div>
         <div
@@ -129,25 +131,18 @@ const UserNavBar = (props) => {
             props.onDotButtonClick();
           }}
         >
-          <box-icon name="dots-vertical-rounded"></box-icon>{" "}
+          <box-icon
+            name="dots-vertical-rounded"
+            color={isDarkMode ? "white" : "black"}
+          ></box-icon>{" "}
         </div>
-        <div id="modal" style={{display: "none",
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)"}} >
-    <div class="modal">
-        <span class="close" id="closeModalBtn">&times;</span>
-        <p>Your specific data goes here.</p>
-    </div>
-</div>
-
-
       </div>
     </div>
   );
 };
 
-export default UserNavBar;
+const mapStateToProps = (state) => ({
+  isDarkMode: state.theme.isDarkMode,
+});
+
+export default connect(mapStateToProps)(UserNavBar);

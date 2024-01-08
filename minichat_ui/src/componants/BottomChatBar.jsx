@@ -1,14 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
-import EmojiPicker from "emoji-picker-react";
+import { connect } from "react-redux";
 
+import EmojiPicker from "emoji-picker-react";
+import { useSelector, useDispatch } from "react-redux";
 const BottomChatBar = (props) => {
+  const { isDarkMode } = props;
+
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [stream, setStream] = useState(null);
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState([]);
   const [size, setIconSize] = useState("100px");
-
+  const messages = useSelector((state) => state.messages);
+  const dispatch = useDispatch();
   const videoRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -51,8 +55,8 @@ const BottomChatBar = (props) => {
 
   const handleSendMessage = () => {
     if (inputValue.trim() !== "") {
-      setMessages((prevMessages) => [...prevMessages, inputValue.trim()]);
-      setInputValue(""); 
+      dispatch({ type: "ADD_MESSAGE", payload: inputValue.trim() });
+      setInputValue("");
     }
   };
 
@@ -84,9 +88,9 @@ const BottomChatBar = (props) => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
-      setMessages((prevMessages) => [...prevMessages, inputValue.trim()]);
-      setInputValue(""); 
-      e.preventDefault(); 
+      dispatch({ type: "ADD_MESSAGE", payload: inputValue.trim() });
+      setInputValue("");
+      e.preventDefault();
     }
   };
 
@@ -119,6 +123,7 @@ const BottomChatBar = (props) => {
           name="microphone"
           type="solid"
           alt="Mic"
+          color={isDarkMode ? "white" : "black"}
           size={`${size}`}
         ></box-icon>
       </div>
@@ -130,9 +135,8 @@ const BottomChatBar = (props) => {
         placeholder="Write something ..."
         id="example-search-input2"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}  
+        onChange={(e) => setInputValue(e.target.value)}
         onKeyUp={(e) => handleKeyPress(e)}
-
       />
 
       <div
@@ -153,6 +157,7 @@ const BottomChatBar = (props) => {
             name="link-alt"
             style={{ cursor: "pointer" }}
             alt="Documents"
+            color={isDarkMode ? "white" : "black"}
             onClick={() => fileInputRef.current.click()}
             size={`${size}`}
           ></box-icon>
@@ -166,6 +171,7 @@ const BottomChatBar = (props) => {
               border: isCameraOpen ? "2px solid red" : "none",
             }}
             alt="Camera"
+            color={isDarkMode ? "white" : "black"}
             size={`${size}`}
             onClick={isCameraOpen ? closeCamera : openCamera}
           ></box-icon>
@@ -176,6 +182,7 @@ const BottomChatBar = (props) => {
             type="solid"
             style={{ cursor: "pointer" }}
             alt="Emoji"
+            color={isDarkMode ? "white" : "black"}
             size={`${size}`}
             onClick={toggleEmojiPicker}
           ></box-icon>
@@ -186,6 +193,7 @@ const BottomChatBar = (props) => {
             type="solid"
             style={{ cursor: "pointer" }}
             alt="Send"
+            color={isDarkMode ? "white" : "black"}
             size={`${size}`}
             onClick={handleSendMessage}
           ></box-icon>
@@ -219,30 +227,11 @@ const BottomChatBar = (props) => {
           />
         </div>
       )}
-      <div
-        style={{
-          position: "absolute",
-          top: "-500px",
-          right: "10px",
-          maxHeight: "500px",
-          textAlign: "right",
-          overflowY: "scroll",
-        }}
-      >
-        {messages.map((message, index) => (
-          <div className="Messagewaladiv" style={{display:"flex" , justifyContent:"end"}}>
-            <p
-              key={index}
-              className="bg-secondary-subtle border rounded-8 p-2"
-              style={{ borderRadius: "16px", maxWidth: "fit-content" }}
-            >
-              {message}
-            </p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
+const mapStateToProps = (state) => ({
+  isDarkMode: state.theme.isDarkMode,
+});
 
-export default BottomChatBar;
+export default connect(mapStateToProps)(BottomChatBar);

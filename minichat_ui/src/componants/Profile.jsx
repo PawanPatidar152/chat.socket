@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+
 const Profile = (props) => {
+  const { isDarkMode } = props;
+
   const [profileName, newProfileName] = useState(props.profileName);
   const [isEditing, setEditing] = useState(false);
   return (
@@ -77,6 +81,7 @@ const Profile = (props) => {
                   name="edit-alt"
                   size="md"
                   alt="Edit"
+                  color={isDarkMode ? "white" : "black"}
                   onClick={() => setEditing(!isEditing)}
                 ></box-icon>
               )}
@@ -88,4 +93,8 @@ const Profile = (props) => {
   );
 };
 
-export default Profile;
+const mapStateToProps = (state) => ({
+  isDarkMode: state.theme.isDarkMode,
+});
+
+export default connect(mapStateToProps)(Profile);

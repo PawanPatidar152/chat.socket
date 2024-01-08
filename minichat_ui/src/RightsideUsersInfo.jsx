@@ -1,7 +1,7 @@
 import React from "react";
 import attachments from "./assets/attachments.png";
 
-const RightsideUsersInfo = () => {
+const RightsideUsersInfo = (props) => {
   return (
     <div className="container pt-4">
       <div>

@@ -10,6 +10,9 @@ import UserNavBar from "./componants/UserNavBar";
 import BottomChatBar from "./componants/BottomChatBar";
 import ProfileRight from "./componants/ProfileRight";
 import "boxicons";
+import Navigation from "./componants/Navigation";
+import { connect } from "react-redux";
+import { toggleTheme } from "./actions";
 
 const profileData = [
   {
@@ -87,7 +90,7 @@ const profileData = [
     id: "8",
   },
 ];
-function App() {
+function App({ isDarkMode, toggleTheme }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState("0");
   const [activeProfile, setActiveProfile] = useState("0");
@@ -152,98 +155,132 @@ function App() {
     const profileRightSide = document.getElementById("profileRight");
     profileRightSide.style.display = "block";
   };
+  const handleToggleButtonClick = () => {
+    {
+      toggleTheme();
+    }
+  };
 
   return (
-    <div style={{ width: "100vw", maxHeight: "100vh  " }} className="d-flex">
-      <div
-        id="leftSide"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-          flexBasis: leftSideChatFlexBasis,
-          flexShrink: "0",
-        }}
-      >
+    <div
+      style={{
+        width: "100vw",
+        backgroundColor: isDarkMode ? "#333" : "#fff",
+        color: isDarkMode ? "#fff" : "#333",
+      }}
+      className="d-flex flex-column "
+    >
+      <div>
+        <Navigation onToggleButtonClick={handleToggleButtonClick} />
+      </div>
+      <div className="d-flex">
         <div
-          className="fixed-div "
-          style={{ width: "100%", height: "100vh", backgroundColor: "#F7F8FC" }}
+          id="leftSide"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            flexBasis: leftSideChatFlexBasis,
+            flexShrink: "0",
+          }}
         >
-          <LeftsideUserProfile />
-          <SearchBar
-            placeholder="Search..."
-            searchValue={searchTerm}
-            onChange={handleSearchChange}
-          />
-          <div style={{ overflow: "scroll", height: "75%" }}>
-            <ul
-              className="list-style"
-              style={{ listStyle: "none", cursor: "pointer", padding: "0px" }}
-            >
-              {filteredProfiles.map((data, index) => (
-                <li
-                  key={data.id}
-                  onClick={() => handleProfileClick(data.id)}
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.backgroundColor = "#dce2ec")
-                  }
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.backgroundColor = "")
-                  }
-                >
-                  <Profile
-                    name={data.name}
-                    description={data.description}
-                    image={data.image}
-                    endText={data.endText}
-                    isActive={data.id === activeProfile}
-                  />
-                </li>
-              ))}
-            </ul>
+          <div
+            className="fixed-div "
+            style={{
+              width: "100%",
+              height: "100vh",
+            }}
+          >
+            <LeftsideUserProfile />
+
+            <SearchBar
+              placeholder="Search..."
+              searchValue={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <div style={{ overflow: "scroll", height: "75%" }}>
+              <ul
+                className="list-style"
+                style={{
+                  listStyle: "none",
+                  cursor: "pointer",
+                  padding: "0px",
+                }}
+              >
+                {filteredProfiles.map((data, index) => (
+                  <li
+                    key={data.id}
+                    onClick={() => handleProfileClick(data.id)}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#dce2ec")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.backgroundColor = "")
+                    }
+                  >
+                    <Profile
+                      name={data.name}
+                      description={data.description}
+                      image={data.image}
+                      endText={data.endText}
+                      isActive={data.id === activeProfile}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        className=" d-md-block border border-secondary"
-        id="chatContainer"
-        style={{
-          display: "none",
-          flexBasis: "70%",
-          position: "relative",
-          flexGrow: "1",
-        }}
-      >
-        <ChatContainer />
-        <UserNavBar
-          name={profileData[user].name}
-          online={profileData[user].online}
-          image={admin}
-          onBackButtonClick={handleBackButtonClick}
-          onDotButtonClick={handleDotButtonClick}
-        />
-        <BottomChatBar name={profileData[user].name} />
-      </div>
-      <div
-        id="profileRight"
-        className="d-none d-xl-block"
-        style={{ flexBasis: "25%" }}
-      >
         <div
-          className="p-4"
-          style={{ height: "100vh", backgroundColor: "#F7F8FC" }}
+          className=" d-md-block border border-secondary"
+          id="chatContainer"
+          style={{
+            display: "none",
+            flexBasis: "70%",
+            position: "relative",
+            flexGrow: "1",
+            height: "93vh",
+          }}
         >
-          <ProfileRight
+          <UserNavBar
             name={profileData[user].name}
-            description="Frontend developer"
+            online={profileData[user].online}
             image={admin}
+            onBackButtonClick={handleBackButtonClick}
+            onDotButtonClick={handleDotButtonClick}
           />
-          <RightsideUsersInfo />
+          <ChatContainer />
+          <BottomChatBar name={profileData[user].name} />
+        </div>
+        <div
+          id="profileRight"
+          className="d-none d-xl-block"
+          style={{ flexBasis: "25%" }}
+        >
+          <div
+            className="p-4"
+            style={{
+              height: "100vh",
+            }}
+          >
+            <ProfileRight
+              name={profileData[user].name}
+              description="Frontend developer"
+              image={admin}
+            />
+            <RightsideUsersInfo />
+          </div>
         </div>
       </div>
     </div>
   );
 }
+const mapStateToProps = (state) => ({
+  isDarkMode: state.theme.isDarkMode,
+});
 
-export default App;
+const mapDispatchToProps = {
+  toggleTheme,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,5 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
+
 const ProfileRight = (props) => {
+  const { isDarkMode } = props;
+
   return (
     <div className="d-flex flex-column align-items-center justify-content-center ">
       <div>
@@ -25,6 +29,7 @@ const ProfileRight = (props) => {
             style={{ height: "40px" }}
             alt="Chat"
             size="md"
+            color={isDarkMode ? "white" : "black"}
           ></box-icon>
           <p>Chat</p>
         </div>
@@ -35,6 +40,7 @@ const ProfileRight = (props) => {
             type="solid"
             size="md"
             alt="Video Calll"
+            color={isDarkMode ? "white" : "black"}
           ></box-icon>
           <p>Video Call</p>
         </div>
@@ -43,4 +49,8 @@ const ProfileRight = (props) => {
   );
 };
 
-export default ProfileRight;
+const mapStateToProps = (state) => ({
+  isDarkMode: state.theme.isDarkMode,
+});
+
+export default connect(mapStateToProps)(ProfileRight);
