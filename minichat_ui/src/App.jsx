@@ -1,5 +1,6 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { toggleTheme } from "./redux/actions";
 import ChatContainer from "./ChatContainer";
 import LeftsideUserProfile from "./LeftsideUserProfile";
 import RightsideUsersInfo from "./RightsideUsersInfo";
@@ -10,10 +11,8 @@ import UserNavBar from "./componants/UserNavBar";
 import BottomChatBar from "./componants/BottomChatBar";
 import ProfileRight from "./componants/ProfileRight";
 import "boxicons";
+import LoginForm from "./UserLogin";
 import Navigation from "./componants/Navigation";
-import { connect } from "react-redux";
-import { toggleTheme } from "./actions";
-
 const profileData = [
   {
     name: "User 1",
@@ -93,6 +92,7 @@ const profileData = [
 function App({ isDarkMode, toggleTheme }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState("0");
+  const [isLoogedin, setIsLoogedin] = useState(false);
   const [activeProfile, setActiveProfile] = useState("0");
   const [leftSideChatFlexBasis, setleftSideChatFlexBasis] = useState("");
   const filteredProfiles = profileData.filter((profile) =>
@@ -122,19 +122,30 @@ function App({ isDarkMode, toggleTheme }) {
     const chatContainers = document.getElementById("chatContainer");
     const leftSideChat = document.getElementById("leftSide");
     const rightSideChat = document.getElementById("profileRight");
+
     setleftSideChatFlexBasis(windowWidth < 767 ? "100%" : "20%");
 
     if (windowWidth <= 767) {
       console.log("====");
     } else {
       console.log("+++");
-      leftSideChat.style.display = "block";
-      chatContainers.style.display = "none";
-      chatContainers.style.width = "100%";
-      chatContainers.style.position = "relative";
-      rightSideChat.style.display = "none";
+
+      if (leftSideChat) {
+        leftSideChat.style.display = "block";
+      }
+
+      if (chatContainers) {
+        chatContainers.style.display = "none";
+        chatContainers.style.width = "100%";
+        chatContainers.style.position = "relative";
+      }
+
+      if (rightSideChat) {
+        rightSideChat.style.display = "none";
+      }
     }
   };
+
   useEffect(() => {
     window.addEventListener("resize", handleFlexBasis);
     handleFlexBasis();
@@ -160,7 +171,9 @@ function App({ isDarkMode, toggleTheme }) {
       toggleTheme();
     }
   };
-
+  const handleLoginFormButtonClick = () => {
+    setIsLoogedin(true);
+  };
   return (
     <div
       style={{
@@ -170,109 +183,115 @@ function App({ isDarkMode, toggleTheme }) {
       }}
       className="d-flex flex-column "
     >
-      <div>
-        <Navigation onToggleButtonClick={handleToggleButtonClick} />
-      </div>
-      <div className="d-flex">
-        <div
-          id="leftSide"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            flexBasis: leftSideChatFlexBasis,
-            flexShrink: "0",
-          }}
-        >
-          <div
-            className="fixed-div "
-            style={{
-              width: "100%",
-              height: "100vh",
-            }}
-          >
-            <LeftsideUserProfile />
-
-            <SearchBar
-              placeholder="Search..."
-              searchValue={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <div style={{ overflow: "scroll", height: "75%" }}>
-              <ul
-                className="list-style"
+      {isLoogedin ? (
+        <>
+          <div>
+            <Navigation onToggleButtonClick={handleToggleButtonClick} />
+          </div>
+          <div className="d-flex">
+            <div
+              id="leftSide"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+                flexBasis: leftSideChatFlexBasis,
+                flexShrink: "0",
+              }}
+            >
+              <div
+                className="fixed-div "
                 style={{
-                  listStyle: "none",
-                  cursor: "pointer",
-                  padding: "0px",
+                  width: "100%",
+                  height: "100vh",
                 }}
               >
-                {filteredProfiles.map((data, index) => (
-                  <li
-                    key={data.id}
-                    onClick={() => handleProfileClick(data.id)}
-                    onMouseOver={(e) =>
-                      (e.currentTarget.style.backgroundColor = "#dce2ec")
-                    }
-                    onMouseOut={(e) =>
-                      (e.currentTarget.style.backgroundColor = "")
-                    }
+                <LeftsideUserProfile />
+
+                <SearchBar
+                  placeholder="Search..."
+                  searchValue={searchTerm}
+                  onChange={handleSearchChange}
+                />
+                <div style={{ overflow: "scroll", height: "75%" }}>
+                  <ul
+                    className="list-style"
+                    style={{
+                      listStyle: "none",
+                      cursor: "pointer",
+                      padding: "0px",
+                    }}
                   >
-                    <Profile
-                      name={data.name}
-                      description={data.description}
-                      image={data.image}
-                      endText={data.endText}
-                      isActive={data.id === activeProfile}
-                    />
-                  </li>
-                ))}
-              </ul>
+                    {filteredProfiles.map((data, index) => (
+                      <li
+                        key={data.id}
+                        onClick={() => handleProfileClick(data.id)}
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.backgroundColor = "#dce2ec")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.backgroundColor = "")
+                        }
+                      >
+                        <Profile
+                          name={data.name}
+                          description={data.description}
+                          image={data.image}
+                          endText={data.endText}
+                          isActive={data.id === activeProfile}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div
+              className=" d-md-block border border-secondary"
+              id="chatContainer"
+              style={{
+                display: "none",
+                flexBasis: "70%",
+                position: "relative",
+                flexGrow: "1",
+                height: "93vh",
+              }}
+            >
+              <UserNavBar
+                name={profileData[user].name}
+                online={profileData[user].online}
+                image={admin}
+                onBackButtonClick={handleBackButtonClick}
+                onDotButtonClick={handleDotButtonClick}
+              />
+              <ChatContainer />
+              <BottomChatBar name={profileData[user].name} />
+            </div>
+            <div
+              id="profileRight"
+              className="d-none d-xl-block"
+              style={{ flexBasis: "25%" }}
+            >
+              <div
+                className="p-4"
+                style={{
+                  height: "100vh",
+                }}
+              >
+                <ProfileRight
+                  name={profileData[user].name}
+                  description="Frontend developer"
+                  image={admin}
+                />
+                <RightsideUsersInfo />
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          className=" d-md-block border border-secondary"
-          id="chatContainer"
-          style={{
-            display: "none",
-            flexBasis: "70%",
-            position: "relative",
-            flexGrow: "1",
-            height: "93vh",
-          }}
-        >
-          <UserNavBar
-            name={profileData[user].name}
-            online={profileData[user].online}
-            image={admin}
-            onBackButtonClick={handleBackButtonClick}
-            onDotButtonClick={handleDotButtonClick}
-          />
-          <ChatContainer />
-          <BottomChatBar name={profileData[user].name} />
-        </div>
-        <div
-          id="profileRight"
-          className="d-none d-xl-block"
-          style={{ flexBasis: "25%" }}
-        >
-          <div
-            className="p-4"
-            style={{
-              height: "100vh",
-            }}
-          >
-            <ProfileRight
-              name={profileData[user].name}
-              description="Frontend developer"
-              image={admin}
-            />
-            <RightsideUsersInfo />
-          </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <LoginForm onLoginFormButtonClick={handleLoginFormButtonClick} />
+      )}
     </div>
   );
 }
