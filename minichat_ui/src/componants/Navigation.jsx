@@ -1,12 +1,19 @@
 import React from "react";
+import { connect } from "react-redux";
 
 const Navigation = (props) => {
+  const { isDarkMode } = props;
+
   return (
-    <nav className="navbar navbar-expand-lg">
+    <nav
+      className="navbar navbar-expand-lg"
+      style={{ height: "100%", padding: "0px 26px", alignItems: "baseline" }}
+    >
       <a className="navbar-brand" href="#">
-        ChatUI Box
+        <p style={{ color: isDarkMode ? "#fff" : "#333" }}> ChatUI Box</p>
       </a>
       <button
+        id="toggleButton"
         className="navbar-toggler"
         type="button"
         data-toggle="collapse"
@@ -15,7 +22,10 @@ const Navigation = (props) => {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon"></span>
+        <span
+          className="navbar-toggler-icon"
+          style={{ backgroundColor: isDarkMode ? "#fff" : "" }}
+        ></span>
       </button>
 
       <div
@@ -25,7 +35,11 @@ const Navigation = (props) => {
       >
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
-            <a className="nav-link" href="#">
+            <a
+              className="nav-link"
+              href="#"
+              style={{ color: isDarkMode ? "#fff" : "#333" }}
+            >
               Home <span className="sr-only">(current)</span>
             </a>
           </li>
@@ -38,49 +52,44 @@ const Navigation = (props) => {
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
+              style={{
+                color: isDarkMode ? "#fff" : "#333",
+              }}
             >
               Dropdown
             </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="#">
-                Action
-              </a>
-              <a className="dropdown-item" href="#">
-                Another action
-              </a>
-              <div className="dropdown-divider"></div>
-              <a className="dropdown-item" href="#">
-                Something else here
-              </a>
-            </div>
           </li>
         </ul>
-        <div className="d-flex">
+        <div className="d-flex" style={{ columnGap: "27px" }}>
           <button
+            style={{
+              padding: " 0px 10px",
+              backgroundColor: isDarkMode ? "#fff" : "#333",
+              color: isDarkMode ? "#333" : "#fff",
+            }}
             onClick={() => {
               props.onToggleButtonClick();
             }}
           >
-            Theme
+            {isDarkMode ? "Light" : "Dark"}
           </button>
-          <form className="form-inline my-2 my-lg-0 d-flex">
-            <input
-              className="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button
-              className="btn btn-outline-success my-2 my-sm-0"
-              type="submit"
-            >
-              Search
-            </button>
-          </form>
+          <button
+            className="btn btn-outline-danger my-2 my-sm-0"
+            type="submit"
+            onClick={() => {
+              props.onLogOutButtonClick();
+            }}
+          >
+            LogOut
+          </button>
         </div>
       </div>
     </nav>
   );
 };
 
-export default Navigation;
+const mapStateToProps = (state) => ({
+  isDarkMode: state.theme.isDarkMode,
+});
+
+export default connect(mapStateToProps)(Navigation);

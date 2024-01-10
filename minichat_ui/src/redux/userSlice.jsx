@@ -9,12 +9,14 @@ export const usersSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action) => {
-      console.log("payload",action.payload)
       const newUser = {
         ...action.payload,
         userId: nanoid(),
       };
       state.users.push(newUser);
+    },
+    updateAllUsers: (state, action) => {
+      state.users = action.payload;
     },
   },
 });

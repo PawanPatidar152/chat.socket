@@ -63,7 +63,10 @@ const UserNavBar = (props) => {
             props.onBackButtonClick();
           }}
         >
-          <box-icon name="arrow-back"></box-icon>{" "}
+          <box-icon
+            name="arrow-back"
+            color={isDarkMode ? "white" : "black"}
+          ></box-icon>{" "}
         </div>
         <img
           src={props.image}

@@ -24,10 +24,7 @@ const LoginForm = (props) => {
     email: "",
     password: "",
     confirmPassword: "",
-    address: "",
-    city: "",
-    state: "",
-    userImage: null, 
+    userImage: null,
   });
 
   const [loginData, setLoginData] = useState({
@@ -35,7 +32,7 @@ const LoginForm = (props) => {
     loginPassword: "",
   });
 
-  const [isSignUp, setIsSignUp] = useState(true);
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
@@ -47,7 +44,7 @@ const LoginForm = (props) => {
     if (isSignUp) {
       setUserData((prevData) => ({
         ...prevData,
-        [name]: type === "file" ? files[0] : value, 
+        [name]: type === "file" ? files[0] : value,
       }));
     } else {
       setLoginData((prevData) => ({
@@ -96,7 +93,6 @@ const LoginForm = (props) => {
         dispatch(addlogedInUser(loginData));
         console.log("Login successful");
         props.onLoginFormButtonClick();
-
       } else {
         alert("Incorrect email or password. Please try again.");
       }
@@ -104,17 +100,24 @@ const LoginForm = (props) => {
   };
 
   return (
-    <div className="d-flex justify-content-center w-100 ">
+    <div className="d-flex justify-content-center w-100  ">
       <form
         className="row g-3 w-50 mt-4 p-4 rounded"
-        style={{ backgroundColor: "rgb(218 191 239)" }}
+        style={{
+          backgroundColor: "rgb(193 195 238)",
+          boxShadow: "17px 17px 21px #b49494",
+        }}
         onSubmit={handleSubmit}
       >
         {isSignUp ? (
           <div>
-            <h4 className=" text-danger text-center">User SignUp Form</h4>
-            <div className="col-12">
-              <label className="form-label">Name</label>
+            <h4 className=" font-weight-bold text-capitalize text-primary text-center">
+               SignUp 
+            </h4>
+            <div className="col-12" style={{marginBottom: "6px"}}>
+              <label className="form-label" style={{ fontSize: "20px" }}>
+                Name
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -124,8 +127,12 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12">
-              <label htmlFor="inputEmail4" className="form-label">
+            <div className="col-12" style={{marginBottom: "6px"}}>
+              <label
+                htmlFor="inputEmail4"
+                className="form-label"
+                style={{ fontSize: "20px" }}
+              >
                 Email
               </label>
               <input
@@ -137,8 +144,12 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12">
-              <label htmlFor="inputPassword4" className="form-label">
+            <div className="col-12" style={{marginBottom: "6px" ,marginBottom: "6px"}}>
+              <label
+                htmlFor="inputPassword4"
+                className="form-label"
+                style={{ fontSize: "20px" }}
+              >
                 Password
               </label>
               <input
@@ -150,8 +161,12 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12">
-              <label htmlFor="confirmPassword" className="form-label">
+            <div className="col-12" style={{marginBottom: "6px"}}>
+              <label
+                htmlFor="confirmPassword"
+                className="form-label"
+                style={{ fontSize: "20px" }}
+              >
                 Confirm Password
               </label>
               <input
@@ -163,8 +178,12 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12">
-              <label htmlFor="userImage" className="form-label">
+            <div className="col-12" style={{marginBottom: "6px"}}>
+              <label
+                htmlFor="userImage"
+                className="form-label"
+                style={{ fontSize: "20px" }}
+              >
                 User Image (Attach Photo)
               </label>
               <input
@@ -172,16 +191,26 @@ const LoginForm = (props) => {
                 className="form-control"
                 id="userImage"
                 name="userImage"
-                accept="image/*" 
+                accept="image/*"
                 onChange={handleInputChange}
               />
             </div>
           </div>
         ) : (
           <>
-            <h4 className=" text-danger text-center">User Login Form</h4>
-            <div className="col-12">
-              <label htmlFor="loginEmail" className="form-label">
+            <h4
+              className=" font-weight-bold text-capitalize text-primary text-center"
+              style={{ fontSize: "34px" }}
+            >
+              {" "}
+              Login{" "}
+            </h4>
+            <div className="col-12" style={{marginBottom: "6px"}}>
+              <label
+                htmlFor="loginEmail"
+                className="form-label "
+                style={{ fontSize: "20px" }}
+              >
                 Email
               </label>
               <input
@@ -193,8 +222,12 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12">
-              <label htmlFor="loginPassword" className="form-label">
+            <div className="col-12" style={{marginBottom: "6px"}}>
+              <label
+                htmlFor="loginPassword"
+                className="form-label"
+                style={{ fontSize: "20px" }}
+              >
                 Password
               </label>
               <input
@@ -209,8 +242,12 @@ const LoginForm = (props) => {
           </>
         )}
 
-        <div className="col-12">
-          <button type="submit" className="btn btn-primary mt-4 w-100">
+        <div className="col-12" style={{marginBottom: "6px"}}>
+          <button
+            type="submit"
+            className="btn btn-primary mt-4 w-100"
+            style={{ fontSize: "26px" }}
+          >
             {isSignUp ? "Sign Up" : "Sign In"}
           </button>
         </div>
@@ -240,7 +277,6 @@ const mapStateToProps = (state) => ({
   isDarkMode: state.theme.isDarkMode,
 });
 
-const mapDispatchToProps = {
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

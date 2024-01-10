@@ -13,6 +13,8 @@ import ProfileRight from "./componants/ProfileRight";
 import "boxicons";
 import LoginForm from "./UserLogin";
 import Navigation from "./componants/Navigation";
+import { useSelector } from "react-redux";
+
 const profileData = [
   {
     name: "User 1",
@@ -101,7 +103,7 @@ function App({ isDarkMode, toggleTheme }) {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
-
+  const usersData = useSelector((state) => state.usersData.users);
   const handleProfileClick = (id) => {
     setUser(id);
     setActiveProfile(id);
@@ -174,19 +176,25 @@ function App({ isDarkMode, toggleTheme }) {
   const handleLoginFormButtonClick = () => {
     setIsLoogedin(true);
   };
+  const handleLogOutButtonClick=()=>{
+    setIsLoogedin(false);
+
+  }
   return (
     <div
       style={{
         width: "100vw",
+        height: "100vh",
         backgroundColor: isDarkMode ? "#333" : "#fff",
         color: isDarkMode ? "#fff" : "#333",
       }}
-      className="d-flex flex-column "
+      className="d-flex flex-column justify-content-center
+      "
     >
       {isLoogedin ? (
         <>
-          <div>
-            <Navigation onToggleButtonClick={handleToggleButtonClick} />
+          <div style={{ height: "6vh" }}>
+            <Navigation onToggleButtonClick={handleToggleButtonClick} onLogOutButtonClick={handleLogOutButtonClick} />
           </div>
           <div className="d-flex">
             <div
@@ -198,23 +206,28 @@ function App({ isDarkMode, toggleTheme }) {
                 flexDirection: "column",
                 flexBasis: leftSideChatFlexBasis,
                 flexShrink: "0",
+                height: "94vh",
               }}
             >
               <div
                 className="fixed-div "
                 style={{
                   width: "100%",
-                  height: "100vh",
+                  height: "100%",
                 }}
               >
-                <LeftsideUserProfile />
+                <LeftsideUserProfile
+                  name={usersData[0].name}
+                  image={usersData[0].userImage}
+                />
 
                 <SearchBar
                   placeholder="Search..."
                   searchValue={searchTerm}
                   onChange={handleSearchChange}
                 />
-                <div style={{ overflow: "scroll", height: "75%" }}>
+                <div style={{ overflow: "scroll", height: "80%" ,    paddingTop: "20px"
+}}>
                   <ul
                     className="list-style"
                     style={{
@@ -228,7 +241,7 @@ function App({ isDarkMode, toggleTheme }) {
                         key={data.id}
                         onClick={() => handleProfileClick(data.id)}
                         onMouseOver={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#dce2ec")
+                          (e.currentTarget.style.backgroundColor = isDarkMode ? "#7A7272" : "#dce2ec")
                         }
                         onMouseOut={(e) =>
                           (e.currentTarget.style.backgroundColor = "")
@@ -255,18 +268,24 @@ function App({ isDarkMode, toggleTheme }) {
                 flexBasis: "70%",
                 position: "relative",
                 flexGrow: "1",
-                height: "93vh",
+                height: "94vh",
               }}
             >
-              <UserNavBar
-                name={profileData[user].name}
-                online={profileData[user].online}
-                image={admin}
-                onBackButtonClick={handleBackButtonClick}
-                onDotButtonClick={handleDotButtonClick}
-              />
-              <ChatContainer />
-              <BottomChatBar name={profileData[user].name} />
+              <div >
+                <UserNavBar
+                  name={profileData[user].name}
+                  online={profileData[user].online}
+                  image={admin}
+                  onBackButtonClick={handleBackButtonClick}
+                  onDotButtonClick={handleDotButtonClick}
+                />
+              </div>
+              <div>
+                <ChatContainer />
+              </div>
+              <div>
+                <BottomChatBar name={profileData[user].name} />
+              </div>
             </div>
             <div
               id="profileRight"
@@ -276,7 +295,7 @@ function App({ isDarkMode, toggleTheme }) {
               <div
                 className="p-4"
                 style={{
-                  height: "100vh",
+                  height: "100%",
                 }}
               >
                 <ProfileRight

@@ -1,18 +1,24 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { Modal, Button } from "react-bootstrap";
+import ProfileDisplay from "./ProfileDisplay";
 
 const Profile = (props) => {
   const { isDarkMode } = props;
+  const [showModal, setShowModal] = useState(false);
 
   const [profileName, newProfileName] = useState(props.profileName);
   const [isEditing, setEditing] = useState(false);
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
+
   return (
     <div
       className="d-flex align-items-center justify-content-between  "
       style={{
         padding: "0px 15px",
         width: "100%",
-        backgroundColor: props.isActive ? "#dce2ec" : "",
+        backgroundColor: props.isActive ?(props.isDarkMode ? "#7A7272" : "#dce2ec") : " "
       }}
     >
       <div className="m-3 d-flex gap-3">
@@ -20,7 +26,7 @@ const Profile = (props) => {
           <img
             src={props.image}
             alt="admin image"
-            style={{ height: "48px", borderRadius: "50%" }}
+            style={{ height: "48px", width:"48px", borderRadius: "50%" }}
           />
         </div>
         <div style={{ minWidth: "154px" }}>
@@ -60,35 +66,27 @@ const Profile = (props) => {
         ) : (
           <>
             <div>
-              {isEditing ? (
-                <>
-                  <input
-                    type="text"
-                    value={profileName}
-                    onChange={(e) => newProfileName(e.target.value)}
-                    style={{
-                      width: "113px",
-                      position: "absolute",
-                      left: "94px",
-                      top: "17px",
-                    }}
-                  />
-                  <button onClick={() => setEditing(!isEditing)}>Save</button>
-                </>
-              ) : (
+              <>
                 <box-icon
                   type="solid"
-                  name="edit-alt"
+                  name="user"
                   size="md"
                   alt="Edit"
                   color={isDarkMode ? "white" : "black"}
-                  onClick={() => setEditing(!isEditing)}
+                  onClick={handleShow}
                 ></box-icon>
-              )}
+              </>
             </div>
           </>
         )}
       </div>
+
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Profile </Modal.Title>
+        </Modal.Header>
+        <Modal.Body><ProfileDisplay/></Modal.Body>
+      </Modal>
     </div>
   );
 };
