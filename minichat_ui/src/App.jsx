@@ -325,7 +325,8 @@ function App({ isDarkMode, toggleTheme }) {
                 }}
               >
                 <div
-                  className="arrowBackProfile"
+                  className="arrowBackProfile "
+                  style={{cursor:"pointer"}}
                   onClick={() => {
                     onarrowBackProfileButtonClick();
                   }}

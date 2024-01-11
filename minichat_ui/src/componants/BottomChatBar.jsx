@@ -10,6 +10,9 @@ const BottomChatBar = (props) => {
   const [stream, setStream] = useState(null);
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [selectedEmojis, setSelectedEmojis] = useState([]);
+  const [capturedImage, setCapturedImage] = useState(null);
+
   const [size, setIconSize] = useState("100px");
   const messages = useSelector((state) => state.messages);
   const dispatch = useDispatch();
@@ -41,16 +44,27 @@ const BottomChatBar = (props) => {
   };
 
   const handleEmojiClick = (emojiObject) => {
+    setSelectedEmojis((prevSelectedEmojis) => [
+      ...prevSelectedEmojis,
+      emojiObject.emoji,
+    ]);
     setInputValue((prevValue) => prevValue + emojiObject.emoji);
   };
-
   const toggleEmojiPicker = () => {
     setEmojiPickerVisible((prevVisible) => !prevVisible);
   };
 
   const handleFileInputChange = (e) => {
     const files = e.target.files;
-    console.log("Selected files and folders:", files);
+    console.log(files);
+    if (files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const imageDataURL = event.target.result;
+        dispatch({ type: "ADD_IMAGE_MESSAGE", payload: imageDataURL });
+      };
+      reader.readAsDataURL(files[0]);
+    }
   };
 
   const handleSendMessage = () => {
@@ -113,12 +127,29 @@ const BottomChatBar = (props) => {
     };
   }, []);
 
+  const handleCapture = () => {
+    if (videoRef.current) {
+      const canvas = document.createElement("canvas");
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      const context = canvas.getContext("2d");
+
+      context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+      const imageDataURL = canvas.toDataURL("image/png");
+      setCapturedImage(imageDataURL);
+      closeCamera(); // Close the camera after capturing
+      dispatch({ type: "ADD_IMAGE_MESSAGE", payload: imageDataURL });
+
+    }
+  };
+console.log(capturedImage)
   return (
     <div
       className="d-flex align-items-center w-100 p-1 border-top border-secondary"
       style={{ position: "absolute", bottom: "0px" }}
     >
-      <div>
+      <div style={{ cursor: "pointer" }}>
         <box-icon
           name="microphone"
           type="solid"
@@ -149,8 +180,7 @@ const BottomChatBar = (props) => {
             style={{ display: "none" }}
             ref={fileInputRef}
             onChange={handleFileInputChange}
-            multiple
-            webkitdirectory="true"
+            accept="image/*" // Allow only image files
           />
 
           <box-icon
@@ -225,6 +255,15 @@ const BottomChatBar = (props) => {
               bottom: "90vh",
             }}
           />
+          <button
+            onClick={handleCapture}
+            style={{
+              position: "relative",
+              bottom: "100vh",
+            }}
+          >
+            Capture
+          </button>
         </div>
       )}
     </div>

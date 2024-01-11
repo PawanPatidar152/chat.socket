@@ -7,7 +7,13 @@ const messageReducer = (state = initialState, action) => {
     case "ADD_MESSAGE":
       return {
         ...state,
-        messages: [...state.messages, action.payload],
+        messages: [...state.messages, { type: 'text', content: action.payload }],
+      };
+
+    case "ADD_IMAGE_MESSAGE":
+      return {
+        ...state,
+        messages: [...state.messages, { type: 'image', content: action.payload }],
       };
 
     default:

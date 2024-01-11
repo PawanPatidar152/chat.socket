@@ -62,7 +62,8 @@ const Profile = (props) => {
           <p style={{ fontSize: "12px" }}>{props.endText}</p>
         ) : (
           <>
-            <div>
+            <div                   style={{cursor:"pointer"}}
+>
               <>
                 <box-icon
                   type="solid"

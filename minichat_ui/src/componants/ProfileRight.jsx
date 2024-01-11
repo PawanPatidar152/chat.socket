@@ -22,7 +22,8 @@ const ProfileRight = (props) => {
         </div>
       </div>
       <div className="w-100 m-2 d-flex align-items-center justify-content-evenly">
-        <div className="d-flex align-items-center justify-content-center flex-column">
+        <div className="d-flex align-items-center justify-content-center flex-column"                   style={{cursor:"pointer"}}
+>
           <box-icon
             name="message-rounded-dots"
             type="solid"
@@ -34,7 +35,8 @@ const ProfileRight = (props) => {
           <p>Chat</p>
         </div>
 
-        <div className="d-flex align-items-center justify-content-center flex-column">
+        <div className="d-flex align-items-center justify-content-center flex-column"                   style={{cursor:"pointer"}}
+>
           <box-icon
             name="video"
             type="solid"

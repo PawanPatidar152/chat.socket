@@ -7,7 +7,7 @@ const initialState = {
       case "SEARCH_MESSAGE":
         return {
           ...state,
-          SearchMessage: [ action.payload],
+          SearchMessage: action.payload,
         };
   
       default:

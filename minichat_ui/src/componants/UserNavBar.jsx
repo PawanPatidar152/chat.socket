@@ -44,7 +44,7 @@ const UserNavBar = (props) => {
       >
         <div
           className="arrow-back"
-          style={{ display: `${arrow}` }}
+          style={{ display: `${arrow}`, cursor: "pointer" }}
           onClick={() => {
             props.onBackButtonClick();
           }}
@@ -105,7 +105,7 @@ const UserNavBar = (props) => {
             onClick={toggleSearch}
           ></box-icon>
         </div>
-        <div>
+        <div style={{ cursor: "pointer" }}>
           <box-icon
             name="video"
             type="solid"
@@ -115,6 +115,7 @@ const UserNavBar = (props) => {
           ></box-icon>
         </div>
         <div
+          style={{ cursor: "pointer" }}
           onClick={() => {
             props.onDotButtonClick();
           }}
@@ -129,9 +130,11 @@ const UserNavBar = (props) => {
             <Modal.Title>Profile User </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <ProfileRight   name={props.profileData[props.user].name}
-                  description="Frontend developer"
-                  image={props.profileData[props.user].image}/>
+            <ProfileRight
+              name={props.profileData[props.user].name}
+              description="Frontend developer"
+              image={props.profileData[props.user].image}
+            />
           </Modal.Body>
         </Modal>
       </div>
