@@ -9,7 +9,7 @@ export const logedInSlice = createSlice({
   initialState,
   reducers: {
     addlogedInUser: (state, action) => {
-      console.log("payload",action.payload)
+      console.log("payload", action.payload);
       const newUser = {
         ...action.payload,
         userId: nanoid(),

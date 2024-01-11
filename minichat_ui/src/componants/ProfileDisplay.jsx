@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../redux/userSlice";
+import { updateAllUsers } from "../redux/userSlice";
 
 const ProfileDisplay = () => {
   const dispatch = useDispatch();
@@ -107,7 +107,7 @@ const ProfileDisplay = () => {
       </div>
       <div className="col-12" style={{marginBottom:"6px"}}>
 
-      <button type="button" class="btn btn-success" onClick={handleSubmit}>Success</button>
+      <button type="button" className="btn btn-success" onClick={handleSubmit}>Success</button>
 </div>
     </div>
   );

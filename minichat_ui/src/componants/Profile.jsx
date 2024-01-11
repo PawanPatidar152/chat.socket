@@ -6,9 +6,7 @@ import ProfileDisplay from "./ProfileDisplay";
 const Profile = (props) => {
   const { isDarkMode } = props;
   const [showModal, setShowModal] = useState(false);
-
   const [profileName, newProfileName] = useState(props.profileName);
-  const [isEditing, setEditing] = useState(false);
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
@@ -48,7 +46,6 @@ const Profile = (props) => {
                   fontWeight: "600",
                   textWrap: "wrap",
                   overflow: "auto",
-                  visibility: isEditing ? "hidden" : "visible",
                 }}
               >
                 {profileName}
@@ -71,7 +68,7 @@ const Profile = (props) => {
                   type="solid"
                   name="user"
                   size="md"
-                  alt="Edit"
+                  alt="user"
                   color={isDarkMode ? "white" : "black"}
                   onClick={handleShow}
                 ></box-icon>

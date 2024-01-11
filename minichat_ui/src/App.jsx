@@ -4,7 +4,6 @@ import { toggleTheme } from "./redux/actions";
 import ChatContainer from "./ChatContainer";
 import LeftsideUserProfile from "./LeftsideUserProfile";
 import RightsideUsersInfo from "./RightsideUsersInfo";
-import admin from "./assets/admin.png";
 import Profile from "./componants/Profile";
 import SearchBar from "./componants/SearchBar";
 import UserNavBar from "./componants/UserNavBar";
@@ -18,32 +17,32 @@ import { useSelector } from "react-redux";
 const profileData = [
   {
     name: "User 1",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/200",
     endText: "10:20",
     online: true,
     id: "0",
   },
   {
     name: "User 2",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/201",
     endText: "10:20",
     online: true,
     id: "1",
   },
   {
     name: "User 3",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/202",
     endText: "10:20",
     online: false,
     id: "2",
   },
   {
     name: "User 4",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/203",
     endText: "10:20",
     online: false,
     id: "3",
@@ -51,32 +50,32 @@ const profileData = [
 
   {
     name: "User 5",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/204",
     endText: "10:20",
     online: true,
     id: "4",
   },
   {
     name: "User 6",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/205",
     endText: "10:20",
     online: false,
     id: "5",
   },
   {
     name: "User 7",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/206",
     endText: "10:20",
     online: true,
     id: "6",
   },
   {
     name: "User 8",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/207",
     endText: "10:20",
     online: false,
 
@@ -84,8 +83,8 @@ const profileData = [
   },
   {
     name: "User 9",
-    description: "Last chat massage",
-    image: admin,
+    description: "Last chat message",
+    image: "https://picsum.photos/208",
     endText: "10:20",
     online: true,
     id: "8",
@@ -97,6 +96,9 @@ function App({ isDarkMode, toggleTheme }) {
   const [isLoogedin, setIsLoogedin] = useState(false);
   const [activeProfile, setActiveProfile] = useState("0");
   const [leftSideChatFlexBasis, setleftSideChatFlexBasis] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
   const filteredProfiles = profileData.filter((profile) =>
     profile.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -164,9 +166,16 @@ function App({ isDarkMode, toggleTheme }) {
   };
 
   const handleDotButtonClick = () => {
-    console.log(" triple dot Button Clicked...");
-    const profileRightSide = document.getElementById("profileRight");
-    profileRightSide.style.display = "block";
+    const windowWidth = window.innerWidth;
+    if (windowWidth >= 1025) {
+      const profileRightSide = document.getElementById("profileRight");
+
+      if (profileRightSide) {
+        profileRightSide.style.display = "block";
+      }
+    } else {
+      handleShow();
+    }
   };
   const handleToggleButtonClick = () => {
     {
@@ -176,10 +185,14 @@ function App({ isDarkMode, toggleTheme }) {
   const handleLoginFormButtonClick = () => {
     setIsLoogedin(true);
   };
-  const handleLogOutButtonClick=()=>{
+  const handleLogOutButtonClick = () => {
     setIsLoogedin(false);
-
-  }
+  };
+  const onarrowBackProfileButtonClick = () => {
+    const profileRightSide = document.getElementById("profileRight");
+    console.log(profileRightSide);
+    profileRightSide.style.display = "none";
+  };
   return (
     <div
       style={{
@@ -194,7 +207,10 @@ function App({ isDarkMode, toggleTheme }) {
       {isLoogedin ? (
         <>
           <div style={{ height: "6vh" }}>
-            <Navigation onToggleButtonClick={handleToggleButtonClick} onLogOutButtonClick={handleLogOutButtonClick} />
+            <Navigation
+              onToggleButtonClick={handleToggleButtonClick}
+              onLogOutButtonClick={handleLogOutButtonClick}
+            />
           </div>
           <div className="d-flex">
             <div
@@ -226,8 +242,13 @@ function App({ isDarkMode, toggleTheme }) {
                   searchValue={searchTerm}
                   onChange={handleSearchChange}
                 />
-                <div style={{ overflow: "scroll", height: "80%" ,    paddingTop: "20px"
-}}>
+                <div
+                  style={{
+                    overflow: "scroll",
+                    height: "80%",
+                    paddingTop: "20px",
+                  }}
+                >
                   <ul
                     className="list-style"
                     style={{
@@ -241,7 +262,9 @@ function App({ isDarkMode, toggleTheme }) {
                         key={data.id}
                         onClick={() => handleProfileClick(data.id)}
                         onMouseOver={(e) =>
-                          (e.currentTarget.style.backgroundColor = isDarkMode ? "#7A7272" : "#dce2ec")
+                          (e.currentTarget.style.backgroundColor = isDarkMode
+                            ? "#7A7272"
+                            : "#dce2ec")
                         }
                         onMouseOut={(e) =>
                           (e.currentTarget.style.backgroundColor = "")
@@ -271,13 +294,17 @@ function App({ isDarkMode, toggleTheme }) {
                 height: "94vh",
               }}
             >
-              <div >
+              <div>
                 <UserNavBar
                   name={profileData[user].name}
                   online={profileData[user].online}
-                  image={admin}
+                  image={profileData[user].image}
                   onBackButtonClick={handleBackButtonClick}
                   onDotButtonClick={handleDotButtonClick}
+                  showModal={showModal}
+                  handleClose={handleClose}
+                  profileData={profileData}
+                  user={user}
                 />
               </div>
               <div>
@@ -289,8 +316,7 @@ function App({ isDarkMode, toggleTheme }) {
             </div>
             <div
               id="profileRight"
-              className="d-none d-xl-block"
-              style={{ flexBasis: "25%" }}
+              style={{ flexBasis: "25%", display: "none" }}
             >
               <div
                 className="p-4"
@@ -298,10 +324,22 @@ function App({ isDarkMode, toggleTheme }) {
                   height: "100%",
                 }}
               >
+                <div
+                  className="arrowBackProfile"
+                  onClick={() => {
+                    onarrowBackProfileButtonClick();
+                  }}
+                >
+                  <box-icon
+                    name="arrow-back"
+                    color={isDarkMode ? "white" : "black"}
+                  ></box-icon>
+                </div>
+
                 <ProfileRight
                   name={profileData[user].name}
                   description="Frontend developer"
-                  image={admin}
+                  image={profileData[user].image}
                 />
                 <RightsideUsersInfo />
               </div>

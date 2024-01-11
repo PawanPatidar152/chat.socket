@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
+import { Modal } from "react-bootstrap";
 
+import ProfileRight from "./ProfileRight";
 const UserNavBar = (props) => {
   const { isDarkMode } = props;
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [searchTermMessage, setsearchTermMessage] = useState("");
+  const dispatch = useDispatch();
   const [arrow, setArrow] = useState("none");
-  const [dot, setDot] = useState("none");
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -13,15 +17,10 @@ const UserNavBar = (props) => {
 
   useEffect(() => {
     const handleArrow = () => {
-      const windowWidth = window.innerWidth;
-      if (windowWidth <= 767) {
-        setArrow("block");
-      } else {
-        setArrow("none");
-      }
+      setArrow(window.innerWidth <= 767 ? "block" : "none");
     };
-    window.addEventListener("resize", handleArrow);
 
+    window.addEventListener("resize", handleArrow);
     handleArrow();
 
     return () => {
@@ -29,23 +28,10 @@ const UserNavBar = (props) => {
     };
   }, [setArrow]);
 
-  useEffect(() => {
-    const handleDot = () => {
-      const windowWidth = window.innerWidth;
-      if (windowWidth <= 1199) {
-        setDot("block");
-      } else {
-        setDot("none");
-      }
-    };
-    window.addEventListener("resize", handleDot);
-
-    handleDot();
-
-    return () => {
-      window.removeEventListener("resize", handleDot);
-    };
-  }, [setDot]);
+  const handleSearchMessageChange = (event) => {
+    setsearchTermMessage(event.target.value);
+    dispatch({ type: "SEARCH_MESSAGE", payload: event.target.value });
+  };
 
   return (
     <div
@@ -66,7 +52,7 @@ const UserNavBar = (props) => {
           <box-icon
             name="arrow-back"
             color={isDarkMode ? "white" : "black"}
-          ></box-icon>{" "}
+          ></box-icon>
         </div>
         <img
           src={props.image}
@@ -104,8 +90,8 @@ const UserNavBar = (props) => {
               type="search"
               placeholder="Search..."
               id="example-search-input2"
-              searchValue={props.searchValue}
-              onChange={props.onChange}
+              searchvalue={searchTermMessage}
+              onChange={handleSearchMessageChange}
             />
           </div>
         )}
@@ -129,7 +115,6 @@ const UserNavBar = (props) => {
           ></box-icon>
         </div>
         <div
-          style={{ display: `${dot}` }}
           onClick={() => {
             props.onDotButtonClick();
           }}
@@ -137,8 +122,18 @@ const UserNavBar = (props) => {
           <box-icon
             name="dots-vertical-rounded"
             color={isDarkMode ? "white" : "black"}
-          ></box-icon>{" "}
+          ></box-icon>
         </div>
+        <Modal show={props.showModal} onHide={props.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Profile User </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <ProfileRight   name={props.profileData[props.user].name}
+                  description="Frontend developer"
+                  image={props.profileData[props.user].image}/>
+          </Modal.Body>
+        </Modal>
       </div>
     </div>
   );

@@ -7,16 +7,7 @@ import { addlogedInUser } from "./redux/loginUsersSlice";
 const LoginForm = (props) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.usersData.users);
-  const loginsData = useSelector((state) => state.loginsData.logedInUsers);
-  const lastUsersPass =
-    usersData.length > 0 ? usersData[usersData.length - 1].password : null;
-  const lastLoggedInPass =
-    loginsData.length > 0
-      ? loginsData[loginsData.length - 1].loginPassword
-      : null;
 
-  console.log("DATA", usersData, loginsData);
-  console.log("LAST", lastUsersPass, lastLoggedInPass);
   const [userImage, setUserImageLocal] = useState(null);
 
   const [userData, setUserData] = useState({
@@ -76,13 +67,9 @@ const LoginForm = (props) => {
         userData.userImage
       );
       setUserImageLocal(uploadedImageDataUrl);
-
-      console.log("User Signup Data:", userData);
       dispatch(addUser({ ...userData, userImage: uploadedImageDataUrl }));
       setIsSignUp(false);
     } else {
-      console.log("User Login Data:", loginData);
-
       const isValidLogin = usersData.some(
         (user) =>
           user.email === loginData.loginEmail &&
@@ -91,7 +78,6 @@ const LoginForm = (props) => {
 
       if (isValidLogin) {
         dispatch(addlogedInUser(loginData));
-        console.log("Login successful");
         props.onLoginFormButtonClick();
       } else {
         alert("Incorrect email or password. Please try again.");
@@ -99,6 +85,19 @@ const LoginForm = (props) => {
     }
   };
 
+  const handleClear = () => {
+    setUserData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      userImage: null,
+    });
+    setLoginData({
+      loginEmail: "",
+      loginPassword: "",
+    });
+  };
   return (
     <div className="d-flex justify-content-center w-100  ">
       <form
@@ -106,15 +105,18 @@ const LoginForm = (props) => {
         style={{
           backgroundColor: "rgb(193 195 238)",
           boxShadow: "17px 17px 21px #b49494",
+          maxWidth: "600px",
         }}
-        onSubmit={handleSubmit}
       >
         {isSignUp ? (
           <div>
-            <h4 className=" font-weight-bold text-capitalize text-primary text-center">
-               SignUp 
+            <h4
+              className=" font-weight-bold text-capitalize text-primary text-center"
+              style={{ fontSize: "40px" }}
+            >
+              SignUp
             </h4>
-            <div className="col-12" style={{marginBottom: "6px"}}>
+            <div className="col-12" style={{ marginBottom: "6px" }}>
               <label className="form-label" style={{ fontSize: "20px" }}>
                 Name
               </label>
@@ -127,7 +129,7 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12" style={{marginBottom: "6px"}}>
+            <div className="col-12" style={{ marginBottom: "6px" }}>
               <label
                 htmlFor="inputEmail4"
                 className="form-label"
@@ -144,7 +146,10 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12" style={{marginBottom: "6px" ,marginBottom: "6px"}}>
+            <div
+              className="col-12"
+              style={{ marginBottom: "6px", marginBottom: "6px" }}
+            >
               <label
                 htmlFor="inputPassword4"
                 className="form-label"
@@ -161,7 +166,7 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12" style={{marginBottom: "6px"}}>
+            <div className="col-12" style={{ marginBottom: "6px" }}>
               <label
                 htmlFor="confirmPassword"
                 className="form-label"
@@ -178,7 +183,7 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12" style={{marginBottom: "6px"}}>
+            <div className="col-12" style={{ marginBottom: "6px" }}>
               <label
                 htmlFor="userImage"
                 className="form-label"
@@ -200,12 +205,12 @@ const LoginForm = (props) => {
           <>
             <h4
               className=" font-weight-bold text-capitalize text-primary text-center"
-              style={{ fontSize: "34px" }}
+              style={{ fontSize: "44px" }}
             >
               {" "}
               Login{" "}
             </h4>
-            <div className="col-12" style={{marginBottom: "6px"}}>
+            <div className="col-12" style={{ marginBottom: "6px" }}>
               <label
                 htmlFor="loginEmail"
                 className="form-label "
@@ -222,7 +227,7 @@ const LoginForm = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-12" style={{marginBottom: "6px"}}>
+            <div className="col-12" style={{ marginBottom: "6px" }}>
               <label
                 htmlFor="loginPassword"
                 className="form-label"
@@ -242,17 +247,42 @@ const LoginForm = (props) => {
           </>
         )}
 
-        <div className="col-12" style={{marginBottom: "6px"}}>
+        <div
+          className="col-12 d-flex "
+          style={{
+            marginBottom: "6px",
+            justifyContent: "flex-end",
+            columnGap: "20px",
+          }}
+        >
           <button
-            type="submit"
+            type="button"
+            className="btn btn-danger mt-4 w-100"
+            style={{ fontSize: "26px", maxWidth: "125px" }}
+            onClick={handleClear}
+          >
+            Clear
+          </button>
+          <button
             className="btn btn-primary mt-4 w-100"
-            style={{ fontSize: "26px" }}
+            onClick={handleSubmit}
+            style={{
+              fontSize: "26px",
+              maxWidth: "125px",
+              backgroundColor: "#568e3a",
+              border: "none",
+            }}
           >
             {isSignUp ? "Sign Up" : "Sign In"}
           </button>
         </div>
         <div className="col-12 mt-2">
-          <button type="button" className="btn btn-link" onClick={toggleForm}>
+          <button
+            type="button"
+            className="btn btn-link"
+            onClick={toggleForm}
+            style={{ fontSize: "20px" }}
+          >
             {isSignUp
               ? "Already have an account? Sign In"
               : "Need an account? Sign Up"}
