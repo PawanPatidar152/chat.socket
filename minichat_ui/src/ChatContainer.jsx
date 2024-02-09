@@ -19,6 +19,14 @@ const ChatContainer = ({ isDarkMode }) => {
     setFilteredMessages(newFilteredMessages);
   }, [searchTermMessage, messages]);
 
+  const formatTimestamp = () => {
+    const date = new Date();
+    const options = { hour: 'numeric', minute: 'numeric' };
+    return date.toLocaleTimeString(undefined, options);
+  };
+  
+
+
   return (
     <div className="m-3" style={{ overflowY: "auto", maxHeight: "73vh" }}>
       <ul>
@@ -32,14 +40,19 @@ const ChatContainer = ({ isDarkMode }) => {
                     borderRadius: "16px",
                     margin:"10px",
                     maxWidth: "fit-content",
+                    textAlign:"right",
                     backgroundColor: isDarkMode ? "#7A7272" : "#dce2ec",
                   }}
                 >
                   {message.content}
+                  <p style={{marginBottom:"0px" , fontSize:"10px"}}>{formatTimestamp()}</p>
+
                 </div>
               )}
-              {message.type === "image" && (
+              {message.type === "image" && (<div style={{display:"flex",flexDirection:"column",alignItems:"flex-end"}}>
                 <img src={message.content} alt="Image" style={{height:"100px ",width:"200px",margin:"10px"}} />
+                <p style={{marginBottom:"0px"}}>{formatTimestamp()}</p>
+                </div>
               )}
             </div>
         ))}

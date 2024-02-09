@@ -10,11 +10,30 @@ const UserNavBar = (props) => {
   const [searchTermMessage, setsearchTermMessage] = useState("");
   const dispatch = useDispatch();
   const [arrow, setArrow] = useState("none");
+  const [size, setIconSize] = useState("");
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
   };
+  useEffect(() => {
+    const handleResize = () => {
+      const windowWidth = window.innerWidth;
 
+      if (windowWidth <= 576) {
+        setIconSize("20px");
+      } else if (windowWidth <= 991) {
+        setIconSize("25px");
+      } else {
+        setIconSize("30px");
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   useEffect(() => {
     const handleArrow = () => {
       setArrow(window.innerWidth <= 767 ? "block" : "none");
@@ -70,7 +89,7 @@ const UserNavBar = (props) => {
               type="solid"
               color="#10d146"
               size="xs"
-            ></box-icon>
+              ></box-icon>
           ) : (
             <p className="m-0" style={{ fontSize: "20px" }}>
               {props.description}
@@ -99,7 +118,7 @@ const UserNavBar = (props) => {
           <box-icon
             name="search-alt-2"
             style={{ cursor: "pointer" }}
-            size="md"
+            size={`${size}`}
             alt="Search"
             color={isDarkMode ? "white" : "black"}
             onClick={toggleSearch}
@@ -109,7 +128,7 @@ const UserNavBar = (props) => {
           <box-icon
             name="video"
             type="solid"
-            size="md"
+            size={`${size}`}
             alt="Video Calll"
             color={isDarkMode ? "white" : "black"}
           ></box-icon>
@@ -123,6 +142,8 @@ const UserNavBar = (props) => {
           <box-icon
             name="dots-vertical-rounded"
             color={isDarkMode ? "white" : "black"}
+            size={`${size}`}
+
           ></box-icon>
         </div>
         <Modal show={props.showModal} onHide={props.handleClose}>

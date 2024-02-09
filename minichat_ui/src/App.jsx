@@ -171,7 +171,7 @@ function App({ isDarkMode, toggleTheme }) {
       const profileRightSide = document.getElementById("profileRight");
 
       if (profileRightSide) {
-        profileRightSide.style.display = "block";
+        profileRightSide.style.display = "block"; 
       }
     } else {
       handleShow();

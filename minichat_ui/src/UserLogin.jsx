@@ -255,26 +255,11 @@ const LoginForm = (props) => {
             columnGap: "20px",
           }}
         >
-          <button
-            type="button"
-            className="btn btn-danger mt-4 w-100"
-            style={{ fontSize: "26px", maxWidth: "125px" }}
-            onClick={handleClear}
-          >
-            Clear
-          </button>
-          <button
-            className="btn btn-primary mt-4 w-100"
-            onClick={handleSubmit}
-            style={{
-              fontSize: "26px",
-              maxWidth: "125px",
-              backgroundColor: "#568e3a",
-              border: "none",
-            }}
-          >
-            {isSignUp ? "Sign Up" : "Sign In"}
-          </button>
+          
+          <button type="button" class="btn btn-danger" onClick={handleClear}>Clear</button>
+
+          <button type="button" class="btn btn-success" onClick={handleSubmit}> {isSignUp ? "Sign Up" : "Sign In"}</button>
+
         </div>
         <div className="col-12 mt-2">
           <button

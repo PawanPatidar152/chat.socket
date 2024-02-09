@@ -13,7 +13,7 @@ const BottomChatBar = (props) => {
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [capturedImage, setCapturedImage] = useState(null);
 
-  const [size, setIconSize] = useState("100px");
+  const [size, setIconSize] = useState("");
   const messages = useSelector((state) => state.messages);
   const dispatch = useDispatch();
   const videoRef = useRef(null);
@@ -89,7 +89,7 @@ const BottomChatBar = (props) => {
       } else if (windowWidth <= 991) {
         setIconSize("25px");
       } else {
-        setIconSize("40px");
+        setIconSize("30px");
       }
     };
 
